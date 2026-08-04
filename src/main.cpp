@@ -1,7 +1,8 @@
 #include <iostream>
+#include "Engine.h"
 
-int main()
-{
-    std::cout << "AtmosphereSim Started!\n";
+int main(){
+    Engine engine;
+    engine.Run();
     return 0;
 }
