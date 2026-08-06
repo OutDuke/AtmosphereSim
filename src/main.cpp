@@ -1,14 +1,12 @@
 #include <iostream>
 #include "TimeSystem.h"
+#include "Engine.h"
 
 int main(){
 
-    TimeSystem time;
-    std::cout << time.GetHour() << std::endl;
-    time.AdvanceHour();
-    std::cout << time.GetHour() << std::endl;
-    time.AdvanceHour();
-    std::cout << time.GetHour() << std::endl;
+    Engine engine;
+
+    engine.Run();
 
     return 0;
 }
