@@ -19,7 +19,7 @@ void Engine::Run()
         int hour = timeSystem.GetHour();
 
         // Update systems
-        temperatureSystem.Update(hour);
+        temperatureSystem.Update(timeSystem);
 
         // Print state
         std::cout << "Hour: " << hour

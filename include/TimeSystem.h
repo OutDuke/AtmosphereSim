@@ -6,4 +6,5 @@ class TimeSystem{
         TimeSystem();
         void AdvanceHour();
         int GetHour() const;
+        void Update(const TimeSystem& timeSystem);
 };

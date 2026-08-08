@@ -1,3 +1,4 @@
+#include "TimeSystem.h"
 #pragma once
 
 class TemperatureSystem
@@ -9,7 +10,7 @@ private:
 public:
     TemperatureSystem();
 
-    void Update(int hour);
+    void Update(const TimeSystem& timeSystem);
     
     float GetTemperature() const;
 };

@@ -1,14 +1,16 @@
 #pragma once
+
 #include "TimeSystem.h"
-class Engine{
-    private:
-        TimeSystem timeSystem;
-        TemperatureSystem temperatureSystem;
+#include "TemperatureSystem.h"
 
-        bool isRunning;
+class Engine
+{
+private:
+    TimeSystem timeSystem;
+    TemperatureSystem temperatureSystem;
+    bool isRunning;
 
-    public:
-        Engine();
-
-        void Run();
+public:
+    Engine();
+    void Run();
 };
