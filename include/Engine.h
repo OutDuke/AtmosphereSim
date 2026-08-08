@@ -3,6 +3,7 @@
 class Engine{
     private:
         TimeSystem timeSystem;
+        TemperatureSystem temperatureSystem;
 
         bool isRunning;
 
