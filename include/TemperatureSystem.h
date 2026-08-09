@@ -10,7 +10,7 @@ private:
 public:
     TemperatureSystem();
 
-    void Update(const TimeSystem& timeSystem);
+    void Update(const TimeSystem& timeSystem, float humidity);
     
     float GetTemperature() const;
 };

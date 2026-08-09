@@ -8,9 +8,9 @@ TemperatureSystem::TemperatureSystem()
     changeRate = 0.1f;
 }
 
-void TemperatureSystem::Update(const TimeSystem& timeSystem)
+void TemperatureSystem::Update(const TimeSystem& timeSystem, float humidity)
 {
-    int hour = timeSystem.GetHour();  // 🔥 NEW
+    int hour = timeSystem.GetHour();
 
     if (hour >= 0 && hour < 6)
         targetTemperature = 15.0f;
@@ -22,6 +22,9 @@ void TemperatureSystem::Update(const TimeSystem& timeSystem)
         targetTemperature = 22.0f;
     else
         targetTemperature = 18.0f;
+
+    // 🔥 NEW: humidity influence
+    targetTemperature -= (humidity - 50.0f) * 0.05f;
 
     currentTemperature += (targetTemperature - currentTemperature) * changeRate;
 }

@@ -10,28 +10,32 @@ Engine::Engine()
 {
 }
 
+void Engine::UpdateSystems()
+{
+    timeSystem.AdvanceHour();
+
+    temperatureSystem.Update(timeSystem, humiditySystem.GetHumidity());
+    humiditySystem.Update(timeSystem);
+}
+
 void Engine::Run()
 {
     std::cout << "Engine Started\n\n";
 
     while (isRunning)
     {
+        UpdateSystems();
+
         int hour = timeSystem.GetHour();
 
-        // Update systems
-        temperatureSystem.Update(timeSystem);
-
-        // Print state
         std::cout << "Hour: " << hour
                   << " Temp: " << temperatureSystem.GetTemperature()
+                  << " Humidity: " << humiditySystem.GetHumidity()
                   << std::endl;
-
-        // Advance time
-        timeSystem.AdvanceHour();
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-        if (timeSystem.GetHour() == 10)
+        if (hour == 10)
         {
             isRunning = false;
         }
