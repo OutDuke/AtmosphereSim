@@ -2,6 +2,7 @@
 #include "TemperatureSystem.h"
 
 #include <iostream>
+#include <string>
 #include <thread>
 #include <chrono>
 
@@ -28,10 +29,22 @@ void Engine::Run()
 
         int hour = timeSystem.GetHour();
 
+        std::string weather;
+
+        float humidity = humiditySystem.GetHumidity();
+
+        if (humidity > 65)
+            weather = "Rainy";
+        else if (humidity > 45)
+            weather = "Cloudy";
+        else
+            weather = "Sunny";
+
         std::cout << "Hour: " << hour
-                  << " Temp: " << temperatureSystem.GetTemperature()
-                  << " Humidity: " << humiditySystem.GetHumidity()
-                  << std::endl;
+                << " Temp: " << temperatureSystem.GetTemperature()
+                << " Humidity: " << humidity
+                << " Weather: " << weather
+                << std::endl;
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
