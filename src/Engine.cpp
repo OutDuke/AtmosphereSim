@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "TemperatureSystem.h"
+#include "WindSystem.h"
 
 #include <iostream>
 #include <string>
@@ -14,9 +15,13 @@ Engine::Engine()
 void Engine::UpdateSystems()
 {
     timeSystem.AdvanceHour();
-
     temperatureSystem.Update(timeSystem, humiditySystem.GetHumidity());
     humiditySystem.Update(timeSystem);
+    weatherSystem.Update(
+        temperatureSystem.GetTemperature(),
+        humiditySystem.GetHumidity()
+    );
+    windSystem.Update(timeSystem.GetHour());
 }
 
 void Engine::Run()
@@ -41,10 +46,11 @@ void Engine::Run()
             weather = "Sunny";
 
         std::cout << "Hour: " << hour
-                << " Temp: " << temperatureSystem.GetTemperature()
-                << " Humidity: " << humidity
-                << " Weather: " << weather
-                << std::endl;
+                  << " Temp: " << temperatureSystem.GetTemperature()
+                  << " Humidity: " << humiditySystem.GetHumidity()
+                  << " Weather: " << weatherSystem.GetWeather()
+                  << " Wind: " << windSystem.GetSpeed()
+                  << std::endl;
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
