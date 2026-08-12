@@ -19,7 +19,8 @@ void Engine::UpdateSystems()
     humiditySystem.Update(timeSystem);
     weatherSystem.Update(
         temperatureSystem.GetTemperature(),
-        humiditySystem.GetHumidity()
+        humiditySystem.GetHumidity(),
+        windSystem.GetSpeed()
     );
     windSystem.Update(timeSystem.GetHour());
 }

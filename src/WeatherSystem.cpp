@@ -5,9 +5,11 @@ WeatherSystem::WeatherSystem()
 {
 }
 
-void WeatherSystem::Update(float temperature, float humidity)
+void WeatherSystem::Update(float temperature, float humidity, float windSpeed)
 {
-    if (humidity > 70 && temperature < 25)
+    if (humidity > 70 && windSpeed > 20)
+        currentWeather = "Stormy";
+    else if (humidity > 65 && temperature < 25)
         currentWeather = "Rainy";
     else if (humidity > 50)
         currentWeather = "Cloudy";
