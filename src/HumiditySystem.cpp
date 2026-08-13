@@ -27,3 +27,13 @@ float HumiditySystem::GetHumidity() const
 {
     return currentHumidity;
 }
+
+void HumiditySystem::ReduceHumidity(float amount)
+{
+    float minHumidity = 30.0f;  // natural lower bound
+
+    currentHumidity -= amount;
+
+    if (currentHumidity < minHumidity)
+        currentHumidity = minHumidity;
+}

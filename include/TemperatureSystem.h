@@ -13,4 +13,6 @@ public:
     void Update(const TimeSystem& timeSystem, float humidity);
     
     float GetTemperature() const;
+
+    void ApplyExternalCooling(float amount);
 };

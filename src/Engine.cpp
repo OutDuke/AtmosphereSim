@@ -22,6 +22,17 @@ void Engine::UpdateSystems()
         humiditySystem.GetHumidity(),
         windSystem.GetSpeed()
     );
+    std::string weather = weatherSystem.GetWeather();
+    if (weather == "Stormy")
+    {
+        temperatureSystem.ApplyExternalCooling(2.0f);
+        humiditySystem.ReduceHumidity(5.0f);
+    }
+    else if (weather == "Rainy")
+    {
+        temperatureSystem.ApplyExternalCooling(1.0f);
+        humiditySystem.ReduceHumidity(2.0f);
+    }
     windSystem.Update(timeSystem.GetHour());
 }
 

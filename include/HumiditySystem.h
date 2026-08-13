@@ -13,5 +13,8 @@ public:
     HumiditySystem();
 
     void Update(const TimeSystem& timeSystem);
+    
     float GetHumidity() const;
+
+    void ReduceHumidity(float amount);
 };

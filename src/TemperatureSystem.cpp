@@ -33,3 +33,8 @@ float TemperatureSystem::GetTemperature() const
 {
     return currentTemperature;
 }
+
+void TemperatureSystem::ApplyExternalCooling(float amount)
+{
+    currentTemperature -= amount;
+}
