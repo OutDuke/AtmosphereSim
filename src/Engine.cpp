@@ -1,6 +1,8 @@
 #include "Engine.h"
 #include "TemperatureSystem.h"
 #include "WindSystem.h"
+#include "TimeSystem.h"
+#include "CloudSystem.h"
 
 #include <iostream>
 #include <string>
@@ -14,16 +16,36 @@ Engine::Engine()
 
 void Engine::UpdateSystems()
 {
-    timeSystem.AdvanceHour();
-    temperatureSystem.Update(timeSystem, humiditySystem.GetHumidity());
+    int hour = timeSystem.GetHour();
+
+    windSystem.Update(timeSystem.GetHour());
     humiditySystem.Update(timeSystem);
+    temperatureSystem.Update(
+        timeSystem,
+        humiditySystem.GetHumidity()
+    );
+
+    cloudSystem.Update(
+    timeSystem,
+    humiditySystem.GetHumidity()
+    );
+
     weatherSystem.Update(
         temperatureSystem.GetTemperature(),
         humiditySystem.GetHumidity(),
-        windSystem.GetSpeed()
+        windSystem.GetSpeed(),
+        cloudSystem.GetCloudDensity()
     );
+
+    // 🔁 Feedback loop
     std::string weather = weatherSystem.GetWeather();
-    if (weather == "Stormy")
+
+    if (weather == "Strong Storm")
+    {
+        temperatureSystem.ApplyExternalCooling(3.0f);
+        humiditySystem.ReduceHumidity(8.0f);
+    }
+    else if (weather == "Stormy")
     {
         temperatureSystem.ApplyExternalCooling(2.0f);
         humiditySystem.ReduceHumidity(5.0f);
@@ -33,44 +55,36 @@ void Engine::UpdateSystems()
         temperatureSystem.ApplyExternalCooling(1.0f);
         humiditySystem.ReduceHumidity(2.0f);
     }
-    windSystem.Update(timeSystem.GetHour());
+    
+}
+
+void Engine::PrintState() const
+{
+    std::cout << "Hour: " << timeSystem.GetHour()
+              << " Temp: " << temperatureSystem.GetTemperature()
+              << " Humidity: " << humiditySystem.GetHumidity()
+              << " Wind: " << windSystem.GetSpeed()
+              << " Weather: " << weatherSystem.GetWeather()
+              << " Clouds: " << cloudSystem.GetCloudDensity()
+              << std::endl;
 }
 
 void Engine::Run()
 {
-    std::cout << "Engine Started\n\n";
-
     while (isRunning)
     {
-        UpdateSystems();
+        PrintState();
 
-        int hour = timeSystem.GetHour();
-
-        std::string weather;
-
-        float humidity = humiditySystem.GetHumidity();
-
-        if (humidity > 65)
-            weather = "Rainy";
-        else if (humidity > 45)
-            weather = "Cloudy";
-        else
-            weather = "Sunny";
-
-        std::cout << "Hour: " << hour
-                  << " Temp: " << temperatureSystem.GetTemperature()
-                  << " Humidity: " << humiditySystem.GetHumidity()
-                  << " Weather: " << weatherSystem.GetWeather()
-                  << " Wind: " << windSystem.GetSpeed()
-                  << std::endl;
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
-        if (hour == 10)
+        if (timeSystem.GetHour() == 23)  // ✅ check here
         {
             isRunning = false;
+            continue;
         }
-    }
 
-    std::cout << "\nEngine Stopped\n";
+        UpdateSystems();
+
+        timeSystem.AdvanceHour();
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
 }

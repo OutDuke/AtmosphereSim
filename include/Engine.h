@@ -5,6 +5,7 @@
 #include "HumiditySystem.h"
 #include "WeatherSystem.h"
 #include "WindSystem.h"
+#include "CloudSystem.h"
 
 class Engine
 {
@@ -14,10 +15,12 @@ private:
     HumiditySystem humiditySystem;
     WeatherSystem weatherSystem;
     WindSystem windSystem;  
+    CloudSystem cloudSystem;
     bool isRunning;
 
 public:
     Engine();
     void Run();
-    void UpdateSystems();            
+    void UpdateSystems();
+    void PrintState() const;            
 };

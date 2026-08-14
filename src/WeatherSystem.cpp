@@ -5,18 +5,16 @@ WeatherSystem::WeatherSystem()
 {
 }
 
-void WeatherSystem::Update(float temperature, float humidity, float windSpeed)
+void WeatherSystem::Update(float temperature, float humidity, float windSpeed,float cloudDensity)
 {
-    if (humidity > 70 && windSpeed > 30)
-        currentWeather = "Strong Storm";
-    else if (humidity > 70 && windSpeed > 20)
-        currentWeather = "Stormy";
-    else if (humidity > 65)
-        currentWeather = "Rainy";
-    else if (humidity > 50)
-        currentWeather = "Cloudy";
-    else
-        currentWeather = "Sunny";
+    if (cloudDensity > 80 && windSpeed > 25){
+        "Stormy";}
+    else if (cloudDensity > 70){
+        "Rainy";}
+    else if (cloudDensity > 50){
+        "Cloudy";}
+    else{
+        "Sunny";}
 }
 
 std::string WeatherSystem::GetWeather() const

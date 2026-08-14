@@ -9,7 +9,7 @@ private:
 public:
     WeatherSystem();
 
-    void Update(float temperature, float humidity, float windSpeed);
+    void Update(float temperature, float humidity, float windSpeed,float cloudDensity);
 
     std::string GetWeather() const;
 };
