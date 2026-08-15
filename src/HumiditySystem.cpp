@@ -1,9 +1,14 @@
 #include "HumiditySystem.h"
+#include <random>
 
 HumiditySystem::HumiditySystem()
 {
-    currentHumidity = 50.0f;
-    targetHumidity = 50.0f;
+    static std::random_device rd;
+    static std::mt19937 generator(rd());
+    std::uniform_real_distribution<float> distribution(40.0f, 90.0f);
+
+    currentHumidity = distribution(generator);
+    targetHumidity = currentHumidity;
     changeRate = 0.1f;
 }
 

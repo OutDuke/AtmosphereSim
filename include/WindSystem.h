@@ -4,6 +4,8 @@ class WindSystem
 {
 private:
     float speed;
+    float targetSpeed;
+    float changeRate;
 
 public:
     WindSystem();

@@ -73,6 +73,9 @@ void Engine::Run()
 {
     while (isRunning)
     {
+
+        UpdateSystems();
+
         PrintState();
 
         if (timeSystem.GetHour() == 23)  // ✅ check here
@@ -80,8 +83,6 @@ void Engine::Run()
             isRunning = false;
             continue;
         }
-
-        UpdateSystems();
 
         timeSystem.AdvanceHour();
 

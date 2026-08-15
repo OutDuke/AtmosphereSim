@@ -1,10 +1,15 @@
 #include"TemperatureSystem.h"
 #include "TimeSystem.h"
+#include <random>
 
 TemperatureSystem::TemperatureSystem()
 {
-    currentTemperature = 15.0f;
-    targetTemperature = 15.0f;
+    static std::random_device rd;
+    static std::mt19937 generator(rd());
+    std::uniform_real_distribution<float> distribution(10.0f, 30.0f);
+
+    currentTemperature = distribution(generator);
+    targetTemperature = currentTemperature;
     changeRate = 0.1f;
 }
 
