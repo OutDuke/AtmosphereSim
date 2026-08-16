@@ -26,8 +26,8 @@ void Engine::UpdateSystems()
     );
 
     cloudSystem.Update(
-    timeSystem,
-    humiditySystem.GetHumidity()
+        timeSystem,
+        humiditySystem.GetHumidity()
     );
 
     weatherSystem.Update(
@@ -55,9 +55,9 @@ void Engine::UpdateSystems()
         temperatureSystem.ApplyExternalCooling(1.0f);
         humiditySystem.ReduceHumidity(2.0f);
     }
-    
 }
 
+// Print the current state (used each loop iteration)
 void Engine::PrintState() const
 {
     std::cout << "Hour: " << timeSystem.GetHour()
@@ -69,16 +69,30 @@ void Engine::PrintState() const
               << std::endl;
 }
 
+// Print the *initial* randomized state (no automatic UpdateSystems() call).
+// If you prefer the "computed initial state" (after systems apply one update/feedback pass),
+// call UpdateSystems() before calling PrintInitialState() from main().
+void Engine::PrintInitialState() const
+{
+    std::cout << "=== INITIAL STATE ===\n";
+    std::cout << "Hour: " << timeSystem.GetHour()
+              << " Temp: " << temperatureSystem.GetTemperature()
+              << " Humidity: " << humiditySystem.GetHumidity()
+              << " Wind: " << windSystem.GetSpeed()
+              << " Clouds: " << cloudSystem.GetCloudDensity()
+              << " Weather: " << weatherSystem.GetWeather()
+              << "\n=====================\n";
+}
+
 void Engine::Run()
 {
     while (isRunning)
     {
-
         UpdateSystems();
 
         PrintState();
 
-        if (timeSystem.GetHour() == 23)  // ✅ check here
+        if (timeSystem.GetHour() == 23)
         {
             isRunning = false;
             continue;

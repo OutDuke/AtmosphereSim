@@ -22,5 +22,6 @@ public:
     Engine();
     void Run();
     void UpdateSystems();
-    void PrintState() const;            
+    void PrintState() const;
+    void PrintInitialState() const;   // <-- new
 };

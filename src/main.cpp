@@ -2,11 +2,13 @@
 #include "TimeSystem.h"
 #include "Engine.h"
 
-int main(){
-
+int main()
+{
     Engine engine;
 
-    engine.Run();
+    // Print the raw random initial state (weather might be "Clear" as UpdateSystems hasn't run)
+    engine.PrintInitialState();
 
+    engine.Run();
     return 0;
 }
