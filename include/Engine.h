@@ -23,5 +23,9 @@ public:
     void Run();
     void UpdateSystems();
     void PrintState() const;
-    void PrintInitialState() const;   // <-- new
+    void PrintInitialState() const;
+    float GetTemperature() const { return temperatureSystem.GetTemperature(); }
+    float GetCloudDensity() const { return cloudSystem.GetCloudDensity(); }
+    float GetWind() const { return windSystem.GetSpeed(); }
+    std::string GetWeather() const { return weatherSystem.GetWeather(); }
 };
