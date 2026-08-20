@@ -7,6 +7,8 @@
 
 int main()
 {
+    sf::Font font;
+    font.loadFromFile("arial.ttf");
     std::cout << "STARTED\n" << std::flush;
     Engine engine;
 
@@ -31,6 +33,13 @@ int main()
 
     sf::Color currentSkyColor(0, 120, 255);
 
+    bool lightning = false;
+    int lightningTimer = 0;
+    sf::Text infoText;
+    infoText.setFont(font);
+    infoText.setCharacterSize(18);
+    infoText.setFillColor(sf::Color::White);
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -39,11 +48,38 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        
 
-        engine.UpdateSystems();
+        static int simCounter = 0;
+        simCounter++;
+
+        if (simCounter >= 10) // adjust speed here
+        {
+            engine.UpdateSystems();
+            simCounter = 0;
+        }
+
+        static int frameCounter = 0;
+        frameCounter++;
+
+        if (frameCounter >= 60) // ~1 second
+        {
+            engine.AdvanceTime(); // we’ll add this
+            frameCounter = 0;
+        }
 
         float temp = engine.GetTemperature();
         std::string weather = engine.GetWeather();
+
+        if (weather == "Stormy")
+        {
+            if (rand() % 200 == 0)
+            {
+                lightning = true;
+                lightningTimer = 2;
+            }
+        }
+
         int targetRed = std::min(255, (int)(temp * 8));
         int targetBlue = 255 - targetRed;
 
@@ -61,11 +97,33 @@ int main()
         if (weather == "Rainy" || weather == "Stormy")
         {
             window.clear(currentSkyColor);
+            if (engine.GetHumidity() > 80)
+            {
+                sf::RectangleShape fog(sf::Vector2f(800, 600));
+                fog.setFillColor(sf::Color(220, 220, 220, 60));
+                window.draw(fog);
+            }
         }
         else
         {
             window.clear(currentSkyColor);
         }
+
+        int hour = engine.GetHour();
+
+        float dayFactor;
+
+        if (hour >= 6 && hour <= 18)
+            dayFactor = 1.0f;
+        else if (hour < 6)
+            dayFactor = 0.2f + (hour / 6.0f) * 0.8f;
+        else
+            dayFactor = 0.2f + ((24 - hour) / 6.0f) * 0.8f;
+
+        targetColor.r *= dayFactor;
+        targetColor.g *= dayFactor;
+        targetColor.b *= dayFactor;
+
         float speed = 0.02f;
 
         currentSkyColor.r += (targetColor.r - currentSkyColor.r) * speed;
@@ -85,15 +143,20 @@ int main()
             cloudPositions.pop_back();
         }
 
-        float rainSpeed = (weather == "Stormy") ? 10.0f : 5.0f;
+        float rainSpeed = (weather == "Stormy") ? 15.0f : 5.0f;
+        float wind = engine.GetWind();
+
+        int rainCount = (weather == "Stormy") ? 300 : 200;
 
         if (weather == "Rainy" || weather == "Stormy")
         {
-            for (auto& drop : raindrops)
+        for (int i = 0; i < rainCount; i++)
             {
+                auto& drop = raindrops[i];
                 drop.y += rainSpeed;
+                drop.x += wind * 0.1f;
 
-                if (drop.y > 600)
+                if (drop.y > 600 || drop.x > 800 || drop.x < 0)
                 {
                     drop.y = 0;
                     drop.x = xDist(gen);
@@ -107,11 +170,11 @@ int main()
             }
         }
 
-        float wind = engine.GetWind();
 
         for (auto& pos : cloudPositions)
         {
-            pos.x += wind * 0.005f;
+            float cloudSpeed = (weather == "Stormy") ? 0.01f : 0.005f;
+            pos.x += wind * cloudSpeed;
 
             if (pos.x > 800)
                 pos.x = -50;
@@ -125,6 +188,26 @@ int main()
 
             window.draw(cloud);
         }
+
+        if (lightning)
+        {
+            sf::RectangleShape flash(sf::Vector2f(800, 600));
+            flash.setFillColor(sf::Color(255, 255, 255, 150));
+            window.draw(flash);
+
+            lightningTimer--;
+            if (lightningTimer <= 0)
+                lightning = false;
+        }
+        std::string info =
+        "Hour: " + std::to_string(hour) +
+        " Temp: " + std::to_string((int)temp) +
+        " Weather: " + weather;
+
+        infoText.setString(info);
+        infoText.setPosition(10, 10);
+
+        window.draw(infoText);
 
         window.display();
         std::this_thread::sleep_for(std::chrono::milliseconds(16));

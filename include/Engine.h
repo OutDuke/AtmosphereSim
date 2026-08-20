@@ -28,4 +28,7 @@ public:
     float GetCloudDensity() const { return cloudSystem.GetCloudDensity(); }
     float GetWind() const { return windSystem.GetSpeed(); }
     std::string GetWeather() const { return weatherSystem.GetWeather(); }
+    int GetHour() const { return timeSystem.GetHour(); }
+    float GetHumidity() const { return humiditySystem.GetHumidity(); }
+    void AdvanceTime() { timeSystem.AdvanceHour(); }
 };

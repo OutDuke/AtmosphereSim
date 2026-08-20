@@ -3,6 +3,7 @@
 #include "WindSystem.h"
 #include "TimeSystem.h"
 #include "CloudSystem.h"
+#include "HumiditySystem.h"
 
 #include <iostream>
 #include <string>

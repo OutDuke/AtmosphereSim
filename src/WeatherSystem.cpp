@@ -1,27 +1,34 @@
 #include "WeatherSystem.h"
 
-WeatherSystem::WeatherSystem()
-    : currentWeather("Clear")
-{
+WeatherSystem::WeatherSystem(){
+    currentWeather = "Cloudy";
 }
 
 void WeatherSystem::Update(float temperature, float humidity, float windSpeed, float cloudDensity)
 {
-    if (cloudDensity > 80 && windSpeed > 25)
+    if (currentWeather == "Stormy")
     {
-        currentWeather = "Stormy";
+        if (cloudDensity < 70 || windSpeed < 20)
+            currentWeather = "Rainy";
     }
-    else if (cloudDensity > 70)
+    else if (currentWeather == "Rainy")
     {
-        currentWeather = "Rainy";
+        if (cloudDensity > 85 && windSpeed > 25)
+            currentWeather = "Stormy";
+        else if (cloudDensity < 60 && humidity < 65)
+            currentWeather = "Cloudy";
     }
-    else if (cloudDensity > 50)
+    else if (currentWeather == "Cloudy")
     {
-        currentWeather = "Cloudy";
+        if (cloudDensity > 75 && humidity > 70)
+            currentWeather = "Rainy";
+        else if (cloudDensity < 40)
+            currentWeather = "Sunny";
     }
-    else
+    else if (currentWeather == "Sunny" || currentWeather == "Clear")
     {
-        currentWeather = "Sunny";
+        if (cloudDensity > 50)
+            currentWeather = "Cloudy";
     }
 }
 

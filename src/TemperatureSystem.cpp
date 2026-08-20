@@ -10,7 +10,7 @@ TemperatureSystem::TemperatureSystem()
 
     currentTemperature = distribution(generator);
     targetTemperature = currentTemperature;
-    changeRate = 0.1f;
+    changeRate = 0.02f;
 }
 
 void TemperatureSystem::Update(const TimeSystem& timeSystem, float humidity)
@@ -29,9 +29,16 @@ void TemperatureSystem::Update(const TimeSystem& timeSystem, float humidity)
         targetTemperature = 18.0f;
 
     // 🔥 NEW: humidity influence
-    targetTemperature -= (humidity - 50.0f) * 0.05f;
+    targetTemperature -= (humidity - 50.0f) * 0.01f;
 
-    currentTemperature += (targetTemperature - currentTemperature) * changeRate;
+    float humidityEffect = (humidity - 50.0f) * 0.01f;
+    targetTemperature -= humidityEffect;
+
+    float diff = targetTemperature - currentTemperature;
+    currentTemperature += diff * 0.02f;
+
+    currentTemperature = std::max(0.0f, std::min(50.0f, currentTemperature));
+    
 }
 
 float TemperatureSystem::GetTemperature() const

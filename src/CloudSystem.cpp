@@ -10,7 +10,7 @@ void CloudSystem::Update(const TimeSystem& timeSystem, float humidity)
     int hour = timeSystem.GetHour();
 
     // base from humidity
-    cloudDensity += (humidity - cloudDensity) * 0.05f;
+    cloudDensity += (humidity - 50.0f) * 0.02f;
 
     // slight variation with time
     if (hour >= 18 || hour <= 6)
